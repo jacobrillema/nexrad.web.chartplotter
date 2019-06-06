@@ -1,0 +1,25 @@
+{
+  "name": "nexrad.web.chartplotter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://MikeUpjohn@bitbucket.org/MikeUpjohn/nexrad.web.chartplotter.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/MikeUpjohn/nexrad.web.chartplotter#readme",
+  "dependencies": {
+    "@tensorflow/tfjs-node": "^1.1.2",
+    "axios": "^0.19.0",
+    "express": "^4.17.1",
+    "rollup": "^1.14.2",
+    "rollup-plugin-visualizer": "^1.1.1",
+    "socket.io": "^2.2.0",
+    "tf": "^1.0.1"
+  }
+}
