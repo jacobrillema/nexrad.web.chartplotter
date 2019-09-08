@@ -23,6 +23,9 @@ app.get('/', (req, res) => {
 io.on('connection', async client => {
     client.on('loadFile', async file => {
         scans = await axios.post('http://localhost:52680/api/v1/nexrad/scans?RadarFile=KTLX20130520_200356_V06', {"RadarFile": "KTLX20130520_200356_V06","ElevationNumber": 1}, { headers: {'Accept': 'application/json', 'Content-Type': 'application/json'}}).then(response => {return response.data});
+
+        console.log("Scans endpoint returned a value of " + scans);
+
         client.emit('setScans', scans);
     });
 
@@ -45,7 +48,7 @@ io.on('connection', async client => {
             let thisReflectivity = reflectivityList[i];
             let thisAzimuth = Math.radians(azimuthList[i]);
             var sinAzimuth = Math.sin(thisAzimuth);
-            var cosAzimuth = Math.sin(thisAzimuth);
+            var cosAzimuth = Math.cos(thisAzimuth);
 
             let range = mikeUtilities.createRange(0, thisReflectivity.GateCount, 1);
             let multipliedRange = mikeUtilities.multiplyRange(range, thisReflectivity.GateSize);
@@ -54,7 +57,14 @@ io.on('connection', async client => {
             let xs = mikeUtilities.multiplyRange(addedRange, sinAzimuth);
             let ys = mikeUtilities.multiplyRange(addedRange, cosAzimuth);
 
-            let fff = 1;
+            if(xs !== undefined && ys !== undefined && xs.length === ys.length) {
+                let coords = {
+                    x: JSON.stringify(xs),
+                    y: JSON.stringify(ys),
+                };
+
+                client.emit('plot', {coords, thisReflectivity});
+            } 
         }
 
         
@@ -62,6 +72,6 @@ io.on('connection', async client => {
     })
 })
 
-http.listen(8080, () => {
-    console.log('Listening on *:8080')
+http.listen(9595, () => {
+    console.log('Listening on *:9595')
 })

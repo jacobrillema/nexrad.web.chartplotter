@@ -9,18 +9,22 @@ module.exports = {
     },
 
     multiplyRange: function(range, factor) {
+        var newRange = new Array(range.length);
+
         for(let i = 0; i < range.length; i++) {
-            range[i] *= factor;
+            newRange[i] = range[i] * factor;
         }
 
-        return range;
+        return newRange;
     },
 
     addRange: function(range, add) {
+        var newRange = new Array(range.length);
+
         for(let i = 0; i < range.length; i++) {
-            range[i] += add;
+            newRange[i] = range[i] + add;
         }
 
-        return range;
+        return newRange;
     }
 }
