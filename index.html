@@ -4,7 +4,7 @@
             <title>Nexrad WEB GL Plotter</title>
             <style>
                 body {margin: 0;}
-                canvas {width:100%; height:100%;}
+                canvas {width:4000px; height:4000px;}
             </style>
         </head>
         <body>
@@ -18,11 +18,13 @@
             <button id="zoomIn">Zoom In</button>
         </div>
         <div id="display:none; position: absolute; left:40%; top:40%; padding: 100px; background: #FFFFFF; border-radius:10px;">Loading</div>
+        <canvas id="my-canvas" style="background-color:black" height="3000px"></canvas>
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://d3js.org/d3.v5.js"></script>
         <script src="https://threejs.org/build/three.js"></script>
         <script src="/socket.io/socket.io.js"></script>
         <script>
+            
             var cameraPos = 200;
             var scene = new THREE.Scene();
             var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -33,8 +35,14 @@
             })
 
             var sweeper = null
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            document.body.append(renderer.domElement);
+            // renderer.setSize(window.innerWidth, window.innerHeight);
+            // document.body.append(renderer.domElement);
+
+            var canvas = document.getElementById("my-canvas");
+            canvas.width = window.innerWidth;
+            // canvas.height = window.innerHeight;
+			var context = canvas.getContext("2d");
+            context.translate(canvas.width / 2, canvas.height / 2);
 
             $(function() {
                 var socket = io();
@@ -64,35 +72,44 @@
 
                 socket.on('plot', function(data) {
                     var x = JSON.parse(data.coords.x) // parse the x coords
-                var y = JSON.parse(data.coords.y) // parse the y coords
+                    var y = JSON.parse(data.coords.y) // parse the y coords
 
-                var geometry = new THREE.Geometry() // create new geometry for the points
+                    // var geometry = new THREE.Geometry() // create new geometry for the points
 
-                // loop through the coords on the x axis
-                for(index in x) {
-                    // only display data if its dbZ > -33
-                    if(data.thisReflectivity.MomentDataValues[index] > -33) {
-                        // push the data to the vertices at x,y,0
-                        geometry.vertices.push(new THREE.Vector3(x[index], y[index], 0))
-                        /**
-                         * push the color data for the vert
-                         * TODO: Add colortable selection
-                         */
-                        //var colorscale = d3.scaleSequential().domain([-32.0, 94.5]).clamp(true).interpolator(d3.interpolateViridis)
-                        var range = [
-                            0x000000,0x9C9C9C,0x767676,0xFFAAAA,0xEE8C8C,
-                            0xC97070,0x00FB90,0x00BB00,0xFFFF70,0xD0D060,
-                            0xFF6060,0xDA0000,0xAE0000,0x0000FF,0xFFFFFF,0xE700FF
-                        ]
-                        var colorscale = d3.scaleQuantize().domain([-32.0, 94.5]).range(range)
-                        geometry.colors.push(new THREE.Color(colorscale(data.thisReflectivity.MomentDataValues[index])))
+                    // // loop through the coords on the x axis
+                    // for(index in x) {
+                    //     // only display data if its dbZ > -33
+                    //     if(data.thisReflectivity.MomentDataValues[index] > -33) {
+                    //         // push the data to the vertices at x,y,0
+                    //         geometry.vertices.push(new THREE.Vector3(x[index], y[index], 0))
+                    //         /**
+                    //          * push the color data for the vert
+                    //          * TODO: Add colortable selection
+                    //          */
+                    //         //var colorscale = d3.scaleSequential().domain([-32.0, 94.5]).clamp(true).interpolator(d3.interpolateViridis)
+                    //         var range = [
+                    //             0x000000,0x9C9C9C,0x767676,0xFFAAAA,0xEE8C8C,
+                    //             0xC97070,0x00FB90,0x00BB00,0xFFFF70,0xD0D060,
+                    //             0xFF6060,0xDA0000,0xAE0000,0x0000FF,0xFFFFFF,0xE700FF
+                    //         ]
+                    //         var colorscale = d3.scaleQuantize().domain([-32.0, 94.5]).range(range)
+                    //         geometry.colors.push(new THREE.Color(colorscale(data.thisReflectivity.MomentDataValues[index])))
+                    //     }
+                    // }
+
+
+                    // var pointCloud = new THREE.Points(geometry, material) // create the point cloud
+                    // scene.add(pointCloud) // add the point cloud to the scene
+
+                    for(index in x) {
+                        context.fillStyle = '#FF0000';
+                        context.fillRect(x[index], y[index], 2, 2);
                     }
-                }
-
-
-                var pointCloud = new THREE.Points(geometry, material) // create the point cloud
-                scene.add(pointCloud) // add the point cloud to the scene
                 });
+
+                async function sleepXX(ms) {
+                    await new Promise(resolve => setTimeout(resolve, ms));
+                }
 
                 function render() {
                     requestAnimationFrame(render);
