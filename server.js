@@ -4,6 +4,7 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const axios = require('axios');
 const mikeUtilities = require('./useful/useful-functions.js');
+let scans = 0;
 
 app.use('/', express.static(__dirname))
 app.get('/', (req, res) => {
@@ -16,6 +17,7 @@ Math.radians = function(degrees) {
 
 io.on('connection', async client => {
     client.on('load-file', async file => {
+        console.log("Loading file!");
         scans = await axios.post(
             'http://localhost:52680/api/v1/nexrad/scans?RadarFile=KTLX20130520_200356_V06',
             { "RadarFile": "KTLX20130520_200356_V06", "ElevationNumber": 1 },
@@ -23,6 +25,8 @@ io.on('connection', async client => {
             .then(response => {
                 return response.data
             });
+
+            client.emit('set-scans', scans);
     });
 
     client.on('sweep', async sweep => {
@@ -49,7 +53,7 @@ io.on('connection', async client => {
             var sinMultiplier = Math.sin(azimuth);
             var cosMultiplier = Math.cos(azimuth);
 
-            var initialRange = mikeUtilities.addRange(mikeUtilities.multiplyRange(mikeUtilities.createRange(0, reflecitivty.GateCount, 1), reflectivity.GateSize), reflectivity.FirstGate);
+            var initialRange = mikeUtilities.addRange(mikeUtilities.multiplyRange(mikeUtilities.createRange(0, reflectivity.GateCount, 1), reflectivity.GateSize), reflectivity.FirstGate);
             var x = mikeUtilities.multiplyRange(initialRange, sinMultiplier);
             var y = mikeUtilities.multiplyRange(initialRange, cosMultiplier);
 
