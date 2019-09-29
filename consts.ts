@@ -1,0 +1,1 @@
+export const XXX = 'hello my name is mike';
