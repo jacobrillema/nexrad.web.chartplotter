@@ -1,6 +1,11 @@
+body {
+    background-color:#000000;
+}
 .control-panel {
-    position:absolute;
-    background-color:#FFFFFF;
-    padding: 5px;
-    border-bottom-right-radius:5px;
+    padding:5px;
+    background-color:#ABABAB;
+}
+
+h1 {
+    font-weight:bold;
 }

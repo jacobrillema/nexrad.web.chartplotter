@@ -1,17 +1,68 @@
 <!DOCTYPE html>
+
 <head>
-    <title>Nexrad Web GL Plotter</title>
-    <link type="text/css" href="style.css" />
+    <title>NEXRAD Level 3 Radar Viewer</title>
+    <link type="text/css" rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
-    <div class="control-panel">
-        <select id="radar-file-list">
-            <option>Moore Tornado 2013</option>
-        </select>
-        <button id="load-file">Load File</button>
-        <button id="start-sweep">Start Sweep</button>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="control-panel">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="main-title">
+                                <h1>NEXRAD Level 3 Radar Viewer</h1>
+                                <h4>Clear-Air Mode</h4>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <h4>Diagnostics:</h4>
+                            <b>Radar Location: </b><span id="radar-location"></span><br />
+                            <b>Points Rendered: </b><span id="data-points-rendered">0</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-5">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <select id="radar-file-list" class="form-control">
+                                        <option>--- Select an file ---</option>
+                                        <option value="KTLX20130520_200356_V06">Moore, OK Tornado - 20 May 2013</option>
+                                        <option value="KTLX20130531_230048_V06">El Reno, OK Tornado - 31 May 2013</option>
+                                        <option value="KDDC20160524_231518_V06">Dodge City, KS Tornado - 24 May 2016</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-light" id="load-file">Load Radar File</button>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-primary" id="start-sweep">Run Radar Sweep</button>
+                                </div>
+                                <div class="col-md-2">
+                                    <button class="btn btn-link" id="clear-image">Clear</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="canvas-renderer" id="canvas-renderer"></div>
+            </div>
+        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://d3js.org/d3.v5.js"></script>
     <script src="https://threejs.org/build/three.js"></script>
     <script src="/socket.io/socket.io.js"></script>

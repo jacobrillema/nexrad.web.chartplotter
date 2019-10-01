@@ -1,9 +1,13 @@
 var scene = new THREE.Scene();
 var renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.append(renderer.domElement);
 let totalScans = 0;
 let currentScan = 1;
+let totalPoints = 0;
+
+var canvasRenderer = document.getElementById('canvas-renderer');
+renderer.setSize(canvasRenderer.offsetWidth-17, window.innerHeight);
+document.getElementById('canvas-renderer').append(renderer.domElement);
+renderer.setClearColor(0x262626, 1);
 
 $(function () {
     var socket = new io();
@@ -11,18 +15,33 @@ $(function () {
     var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
     $("#load-file").click(function () {
-        socket.emit('load-file', 'KTLX20130520_200356_V06');
+        var radarFile = $("#radar-file-list option:selected").val();
+        $("#radar-location").text(radarFile.substr(0,4));
+        socket.emit('load-file', radarFile);
     });
 
     $("#start-sweep").click(function () {
-        // for(let i = currentScan; i < totalScans; i++) {
         socket.emit('sweep');
-        // }
     });
+
+    $("#clear-image").click(function() {
+        clearScene();
+    });
+
+    function clearScene() {
+        totalPoints = 0;
+        $("#data-points-rendered").text(Number(totalPoints).toLocaleString());
+
+        while(scene.children.length > 0) {
+            scene.remove(scene.children[0]);
+        }
+    }
 
     socket.on('set-scans', function (data) {
         totalScans = data;
         console.log(`Found ${data} scans`);
+        
+        clearScene();
     })
 
     socket.on('plot-data', function (data) {
@@ -42,6 +61,7 @@ $(function () {
             if (reflectivity.MomentDataValues[index] > -33) {
                 geometry.vertices.push(new THREE.Vector3(x[index], y[index], 0));
                 geometry.colors.push(new THREE.Color(reflectivityColourScale(reflectivity.MomentDataValues[index])));
+                updateDiagnostics();
             }
         });
 
@@ -53,6 +73,11 @@ $(function () {
         requestAnimationFrame(renderScene);
         camera.position.z = cameraPosition;
         renderer.render(scene, camera);
+    }
+
+    function updateDiagnostics() {
+        totalPoints++;
+        $("#data-points-rendered").text(Number(totalPoints).toLocaleString());
     }
 
     renderScene();
