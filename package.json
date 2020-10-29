@@ -14,8 +14,8 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/MikeUpjohn/nexrad.web.chartplotter#readme",
   "dependencies": {
-    "@tensorflow/tfjs": "^1.2.1",
-    "@tensorflow/tfjs-node": "^1.2.3",
+    "@tensorflow/tfjs": "^1.7.4",
+    "@tensorflow/tfjs-node": "^1.7.4",
     "axios": "^0.19.0",
     "express": "^4.17.1",
     "rollup": "^1.14.2",

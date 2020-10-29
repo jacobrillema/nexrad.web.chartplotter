@@ -19,7 +19,7 @@ io.on('connection', async client => {
     client.on('load-file', async file => {
         console.log("Loading file!");
         scans = await axios.post(
-            'http://localhost:52680/api/v1/nexrad/scans?RadarFile=KTLX20130520_200356_V06',
+            'http://api.nexrad-radar.localhost/api/v1/nexrad/scans?RadarFile=KTLX20130520_200356_V06',
             { "RadarFile": "KTLX20130520_200356_V06", "ElevationNumber": 1 },
             { headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' } })
             .then(response => {
@@ -32,7 +32,7 @@ io.on('connection', async client => {
     client.on('sweep', async sweep => {
         console.log("Sweeping!");
         var reflectivityList = await axios.post(
-            'http://localhost:52680/api/v1/nexrad/high-resolution-reflectivity?RadarFile=KTLX20130520_200356_V06',
+            'http://api.nexrad-radar.localhost/api/v1/nexrad/high-resolution-reflectivity?RadarFile=KTLX20130520_200356_V06',
             { "RadarFile": "KTLX20130520_200356_V06", "ElevationNumber": 1 },
             { headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' } })
             .then(response => {
@@ -40,7 +40,7 @@ io.on('connection', async client => {
             });
 
         var azimuthList = await axios.post(
-            'http://localhost:52680/api/v1/nexrad/azimuth?RadarFile=KTLX20130520_200356_V06',
+            'http://api.nexrad-radar.localhost/api/v1/nexrad/azimuth?RadarFile=KTLX20130520_200356_V06',
             { "RadarFile": "KTLX20130520_200356_V06", "ElevationNumber": 1 },
             { headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' } })
             .then(response => {
