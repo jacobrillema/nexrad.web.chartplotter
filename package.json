@@ -16,7 +16,7 @@
   "dependencies": {
     "@tensorflow/tfjs": "^1.7.4",
     "@tensorflow/tfjs-node": "^1.7.4",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "express": "^4.17.1",
     "rollup": "^1.14.2",
     "rollup-plugin-visualizer": "^1.1.1",
