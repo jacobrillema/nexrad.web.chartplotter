@@ -20,7 +20,7 @@
     "express": "^4.17.1",
     "rollup": "^1.14.2",
     "rollup-plugin-visualizer": "^1.1.1",
-    "socket.io": "^2.2.0",
+    "socket.io": "^2.4.0",
     "tf": "^1.0.1"
   }
 }
